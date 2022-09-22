@@ -1,8 +1,11 @@
 # resign-app-server
 基于express + mysql搭建的后台服务
 
-## 环境安装
+## Install dependencies
 `npm install`
 
-## 热更新
+## Hot reload
 `npm install nodemon -g`
+
+## Run project
+`npm start`
