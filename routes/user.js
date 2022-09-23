@@ -7,6 +7,6 @@ const {reg_login_schema} = require('../schema/user')
 
 router.post('/register', expressJoi(reg_login_schema), userHandler.register)
 router.post('/login', expressJoi(reg_login_schema), userHandler.login)
-router.get('/:username', userHandler.userinfo)
+router.get('/userinfo/:userid', userHandler.userinfo)
 
 module.exports = router;
