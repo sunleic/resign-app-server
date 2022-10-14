@@ -31,7 +31,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //  token验证
-app.use(expressjwt({secret: config.jwtSecretKey, algorithms: ['HS256'], credentialsRequired: true}).unless({path: [/^\/api\/user\/login|register/]}));
+app.use(expressjwt({secret: config.jwtSecretKey, algorithms: ['HS256'], credentialsRequired: true}).unless({path: [/^\/api\/user\/login|register/,/\/api/]}));
 
 // 数据返回中间件
 app.use(function(req, res, next) {

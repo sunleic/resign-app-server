@@ -34,24 +34,24 @@ exports.login = (req, res) => {
     // console.log('~~~~~~~~~~~用户信息查询---参数：' + JSON.stringify(params));
     const sql = 'select * from users where username=?';
     db.query(sql, params.username, (err, results) => {
-        // console.log('查询结果：----- '+ JSON.stringify(results));
+        console.log('查询结果：----- '+ JSON.stringify(results));
         if (err) return res.cc(err)
-        if (results.length !== 1) return res.cc('登录失败！');
+        if (results.length !== 1) return res.cc(`没有查询到${params.username}用户`);
 
         const compareResult = bcrypt.compareSync(params.password, results[0].password);
-        if (!compareResult) return res.cc('登录失败');
+        if (!compareResult) return res.cc('密码错误');
 
         const user = {...results[0], password: '', avatar: ''};
         const tokenStr = jwt.sign(user, config.jwtSecretKey, {expiresIn: config.expiresIn});
 
-        return res.cc('登陆成功！', {token: 'Bearer ' + tokenStr}, 0);
+        return res.cc('登陆成功', {token: 'Bearer ' + tokenStr, userid:results[0].id??''}, 0);
     })
 }
 
 exports.userinfo = (req, res) => {
     const params = req.params;
     console.log('用户信息查询---参数：' + JSON.stringify(params));
-    const sqlStr = 'SELECT * FROM userinfo WHERE userid = ?';
+    const sqlStr = 'SELECT * FROM users WHERE id = ?';
     db.query(sqlStr, params.userid, (err, results) => {
         console.log('用户信息查询---结果：----- '+ JSON.stringify(results));
         if (err) return res.cc(err);
@@ -97,6 +97,7 @@ exports.userinfo = (req, res) => {
         }
         delete resObject.geographicid;
         delete resObject.tagsid;
+        delete resObject.password;
 
         return res.cc('请求成功', resObject, 0);
     }); 
